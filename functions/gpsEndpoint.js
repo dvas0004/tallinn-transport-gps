@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+var fetch = require("node-fetch");
 
 const API_ENDPOINT = `https://gis.ee/tallinn/geojson.php`;
 

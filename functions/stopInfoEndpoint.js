@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+var fetch = require("node-fetch");
 
 const API_ENDPOINT = `https://transport.tallinn.ee/siri-stop-departures.php`;
 
