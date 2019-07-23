@@ -1,44 +1,43 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Tallinn Transport Map (live)
 
-## Available Scripts
+## [https://tallinn-transport.davidvassallo.me](https://tallinn-transport.davidvassallo.me)
 
-In the project directory, you can run:
+**TL;DR : A map of Tallinn overlaid with the positions of public transport stops and the real-time position of buses, trams, and trolley-buses.... though it turned out that the Estonian government had the exact same idea I had though and had already built their own version [here](https://gis.ee/tallinn/)**
 
-### `npm start`
+### Overview
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The Estonian government tends to be very transparent and publicly releases a lot of the data that they collect. Tallinn city is no exception and has it's own "open data" page (in English!) here:
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+[https://avaandmed.tallinn.ee/eng/](https://avaandmed.tallinn.ee/eng/)
 
-### `npm test`
+Browsing through the list above you'll note a number of links with respect to public transport, including ['Location of public transport vehicles in real time'](https://avaandmed.tallinn.ee/nimistu?id=35). It's useful to me and my immediate family to know when the next bus is arriving at our closest public transport stop (usually out of plain laziness leading us to get to the stop at the last possible minute - however if you ever lived in Estonia you'd know arriving at the last minute takes on a very real need in winter due to the sometimes extreme cold). So I went ahead and built a web app that consumes the realtime data provided by the city and overlaid them on a map. 
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Tapping on the public transport stops shows you the expected arrival time of the next bus, while tapping on the icons representing the public transport vehicles will show basic details like the type of vehicle and the line number they are servicing
 
-### `npm run build`
+After about 8 hours of effort I had a ready app - and just then I realised the Estonian government had already built pretty much the exact same thing I did... 
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+[https://gis.ee/tallinn/](https://gis.ee/tallinn/)
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+The similarities are pretty obvious - and I am happy that it seems my thinking process aligned really well with the Estonian devs... we even used the same libraries! Nevertheless there are some technical differences under the hood that I used:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Use of service workers to provide caching and overall better responsiveness
+- Use of leaflet tile caching again to provide better responsiveness especially on mobile phones
 
-### `npm run eject`
+### Asking for features / bugfixes
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Open an issue: https://github.com/dvas0004/tallinn-transport-gps/issues
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Note**: if there's an open issue with the feature / bug you want address, use the thumbs-up, heart, whatever reaction to vote for it rather than opening a new issue, it helps me decide what to tackle next when I have the time.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Data Sources Used
 
-## Learn More
+- Realtime location of vehicles: http://transport.tallinn.ee/gps.txt
+- Departure / arrival times: https://avaandmed.tallinn.ee/nimistu?id=33
+- After having found the gis.ee server, I've pulled the data from their server because they provide it in easier to process JSON form. Have a look at the source code for the actual urls
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Tech Used
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+* Map powered by [Leaflet](https://leafletjs.com/)
+* ReactJS with TypeScipt: This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+* Hosted on [Netlify](https://www.netlify.com), including the serverless 'backend', built using lambda functions
