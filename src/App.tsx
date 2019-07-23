@@ -7,7 +7,7 @@ const App: React.FC = () => {
     
   return (
     <div className="App">
-      Hello World
+      <a href="https://github.com/dvas0004/tallinn-transport-gps"> About </a>
       <DataContainer />
     </div>
   );

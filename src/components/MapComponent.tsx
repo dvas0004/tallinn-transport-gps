@@ -4,7 +4,7 @@ import MapCacheLayer from './MapCacheLayer';
 import StopDialog from './StopDialog';
 import Axios from 'axios';
 import stopData from '../data/stopData';
-import { iconBus, iconTram } from './MapIcons';
+import { iconBus, iconTram, iconStop, iconTrolleybus } from './MapIcons';
 
 interface IData{
     dataPoint : {id: number|string, line: string, transportType: number, realLat: number, realLong: number}
@@ -36,7 +36,6 @@ const MapComponent = (props : IProps) => {
 
     const getStopInfo = (data: IData['dataPoint']) => {
 
-            //TODO get stop
             Axios.get(`/.netlify/functions/stopInfoEndpoint?stopid=${data.id}`).then(resp=>{
                 const splitData = resp.data.split('\n');
                 if (splitData.length>2){
@@ -95,95 +94,50 @@ const MapComponent = (props : IProps) => {
         </Circle>
         { props.markers ? props.markers.map(data => {
 
-            let color: string;
             let transportType: string;
             let radius = 10
+            let icon;
 
             switch (data.transportType) {
                 case 4:
-                    color = 'orange'
+                    icon = iconStop
                     transportType = 'Stop'
                     break;
                 case 3:
-                    color = 'red'
+                    icon = iconTram
                     transportType = 'Tram'
                     break;
                 case 2:
-                    color = 'blue'
+                    icon = iconBus
                     transportType = 'Bus'
                     break;
                 case 1:
-                    color = 'yellow'
-                    transportType = 'TramBus'
+                    icon = iconTrolleybus
+                    transportType = 'Trolleybus'
                     break;
                 default:
-                    color = 'yellow'
                     transportType = 'TODO'
                     break;
             }
 
-            let marker = <Fragment />
-            switch (data.transportType) {
-                case 2:
-                    marker = <Marker 
-                        key={data.id} 
-                        position={[data.realLat, data.realLong]} 
-                        radius={radius} 
-                        icon={iconBus}
-                        onclick={handleCircleClick(data) }
-                    > 
-                    { 
-                        transportType === "Stop" ? null : <Popup>
-                            {transportType}
-                            <hr />
-                            Line number: {data.line}
-                            <br />
-                            Vehicle ID: {data.id}
-                        </Popup>
-                    }
-                    </Marker>
-                    break;
-                case 3:
-                        marker = <Marker 
-                            key={data.id} 
-                            position={[data.realLat, data.realLong]} 
-                            radius={radius} 
-                            icon={iconTram}
-                            onclick={handleCircleClick(data) }
-                        > 
-                        { 
-                            transportType === "Stop" ? null : <Popup>
-                                {transportType}
-                                <hr />
-                                Line number: {data.line}
-                                <br />
-                                Vehicle ID: {data.id}
-                            </Popup>
-                        }
-                        </Marker>
-                        break;
-                default:
-                    marker = <Circle 
-                        key={data.id} 
-                        center={[data.realLat, data.realLong]} 
-                        radius={radius} 
-                        color={color}
-                        onclick={handleCircleClick(data) }
-                    > 
-                    { 
-                        transportType === "Stop" ? null : <Popup>
-                            {transportType}
-                            <hr />
-                            Line number: {data.line}
-                            <br />
-                            Vehicle ID: {data.id}
-                        </Popup>
-                    }
-                    </Circle>
-                    break;
+            return <Marker 
+                key={data.id} 
+                position={[data.realLat, data.realLong]} 
+                radius={radius} 
+                icon={icon}
+                onclick={handleCircleClick(data) }
+            > 
+            { 
+                transportType === "Stop" ? null : <Popup>
+                    {transportType}
+                    <hr />
+                    Line number: {data.line}
+                    <br />
+                    Vehicle ID: {data.id}
+                </Popup>
             }
+            </Marker>
 
-            return marker
         }) : null }  
         <MapCacheLayer />  
     </Map> , [props.markers, myPosition])
