@@ -31,10 +31,13 @@ const MapComponent = (props : IProps) => {
     const [preferredStop, changePreferredStop] = useState(props.preferredStop);
     const [stopInfo, changeStopInfo] = useState()
     const [stopDialogOpen, changeStopDialogOpen] = useState(false)
+    const [pleaseWait, changePleaseWait] = useState(false)
 
     const handleClose = () => changeStopDialogOpen(false);
 
     const getStopInfo = (data: IData['dataPoint']) => {
+            changePleaseWait(true)
+            changeStopDialogOpen(true)
 
             Axios.get(`/.netlify/functions/stopInfoEndpoint?stopid=${data.id}`).then(resp=>{
                 const splitData = resp.data.split('\n');
@@ -51,7 +54,7 @@ const MapComponent = (props : IProps) => {
                         expectedTimeMinutes: Math.round(((parseInt(expectedTimeInSeconds)/60/60) % 1) * 60)
                     });
                 }
-                
+                changePleaseWait(false)
                 changeStopDialogOpen(true);
             })     
 
@@ -144,7 +147,7 @@ const MapComponent = (props : IProps) => {
     
     return <Fragment>
         {map}
-        <StopDialog handleClose={handleClose} stopDialogOpen={stopDialogOpen} stopInfo={stopInfo} handleReload={getStopInfo}/>
+        <StopDialog handleClose={handleClose} stopDialogOpen={stopDialogOpen} stopInfo={stopInfo} handleReload={getStopInfo} pleaseWait={pleaseWait}/>
     </Fragment>;
 }
 
