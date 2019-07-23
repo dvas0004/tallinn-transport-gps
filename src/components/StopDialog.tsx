@@ -32,7 +32,7 @@ const StopDialog = (props: IProps) => {
         }
     }
 
-    if (props.stopDialogOpen){
+    if (props.stopDialogOpen && !props.pleaseWait){
         window.location.hash=`#stop=${props.stopInfo.id}`;
     }
 
